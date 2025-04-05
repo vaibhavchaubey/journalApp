@@ -2,10 +2,13 @@ package com.vaibhav.journalApp.controller;
 
 
 import com.vaibhav.journalApp.entity.User;
+import com.vaibhav.journalApp.repository.UserRepository;
 import com.vaibhav.journalApp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,24 +21,26 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping()
-    public List<User> getAllUsers() {
-        return userService.getAll();
+    @Autowired
+    private UserRepository userRepository;
+
+    @PutMapping
+    public ResponseEntity<?> updateUser(@RequestBody User user){
+         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+         String username = authentication.getName();
+         User userInDb =  userService.findByUsername(username);
+         userInDb.setUsername(user.getUsername());
+         userInDb.setPassword(user.getPassword());
+         userService.saveEntry(userInDb);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PostMapping
-    public void createUser(@RequestBody User user){
-        userService.saveEntry(user);
-    }
-
-     @PutMapping("/{username}")
-    public ResponseEntity<?> updateUser(@RequestBody User user, @PathVariable String username){
-        User userInDb =  userService.findByUsername(username);
-        if(userInDb != null){
-            userInDb.setUsername(user.getUsername());
-            userInDb.setPassword(user.getPassword());
-            userService.saveEntry(userInDb);
-        }
+    @DeleteMapping
+    public ResponseEntity<?> deleteUser(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        userRepository.deleteByUsername(username);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
