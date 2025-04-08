@@ -21,6 +21,9 @@ public class UserService {
 
     private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
+    public List<User> getAll(){
+        return userRepository.findAll();
+    }
 
     public void saveUser(User user){
         userRepository.save(user);
@@ -32,8 +35,10 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public List<User> getAll(){
-        return userRepository.findAll();
+    public void saveAdmin(User user){
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRoles(Arrays.asList("USER", "ADMIN"));
+        userRepository.save(user);
     }
 
     public Optional<User> findById(ObjectId id){
@@ -47,4 +52,5 @@ public class UserService {
     public  User findByUsername(String username){
         return userRepository.findByUsername(username);
     }
+
 }
