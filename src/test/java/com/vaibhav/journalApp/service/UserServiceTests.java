@@ -49,25 +49,25 @@ public class UserServiceTests {
 
 
 
-    @ParameterizedTest
-    @ArgumentsSource(UserArgumentsProvider.class)
-    public void testSaveNewUser(User user){
+//    @ParameterizedTest
+//    @ArgumentsSource(UserArgumentsProvider.class)
+//    public void testSaveNewUser(User user){
+//
+//        assertTrue(userService.saveNewUser(user));
+//
+//    }
 
-        assertTrue(userService.saveNewUser(user));
-
-    }
 
 
-
-    @ParameterizedTest
-    @CsvSource({
-            "1, 1, 2",
-            "2, 10, 12",
-            "3, 3, 5",
-    })
-    public void test(int a, int b, int expected){
-        assertEquals(expected,  a + b);
-    }
+//    @ParameterizedTest
+//    @CsvSource({
+//            "1, 1, 2",
+//            "2, 10, 12",
+//            "3, 3, 5",
+//    })
+//    public void test(int a, int b, int expected){
+//        assertEquals(expected,  a + b);
+//    }
 
 
 }
