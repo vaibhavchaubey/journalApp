@@ -11,8 +11,6 @@
             <fileNamePattern>journalApp-%d{yyyy-MM-dd_HH-mm}.%i.log</fileNamePattern>
             <maxFileSize>10MB</maxFileSize>
             <maxHistory>10</maxHistory>
-            <totalSizeCap>1GB</totalSizeCap>
-            <fileNamePattern>journalApp-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
         </rollingPolicy>
 
         <encoder>
