@@ -43,7 +43,7 @@ public class UserService {
 //            logger.error("Error occurred for {} :",user.getUsername(), e);
 //            return false;
 
-            log.error("Error occurred");
+            log.error("Error occurred", e);
             log.debug("Error occurred");
             return false;
         }
