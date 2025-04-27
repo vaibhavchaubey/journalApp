@@ -22,17 +22,36 @@ public class WeatherService {
     @Autowired
     private AppCache appCache;
 
+    @Autowired
+    private RedisService redisService;
+
     public WeatherResponse getWeather(String city){
-        String finalAPI = appCache.appCache.get(AppCache.keys.WEATHER_API.toString()).replace(Placeholders.API_KEY, apiKey).replace(Placeholders.CITY, city);
+        WeatherResponse weatherResponse = redisService.get("weather_of_" + city, WeatherResponse.class);
+
+        if(weatherResponse != null){
+            return weatherResponse;
+        }
+        else{
+            String finalAPI = appCache.appCache.get(AppCache.keys.WEATHER_API.toString()).replace(Placeholders.API_KEY, apiKey).replace(Placeholders.CITY, city);
 
 
-        /* The process of converting a JSON object into its corresponding Java object is called deserialization or parsing. Essentially, it involves taking a JSON representation of data and recreating it as a Java object, allowing you to work with the data using Java's object-oriented features. */
+            /* The process of converting a JSON object into its corresponding Java object is called deserialization or parsing. Essentially, it involves taking a JSON representation of data and recreating it as a Java object, allowing you to work with the data using Java's object-oriented features. */
 
-         ResponseEntity<WeatherResponse> response = restTemplate.exchange(finalAPI, HttpMethod.GET, null, WeatherResponse.class);
+            ResponseEntity<WeatherResponse> response = restTemplate.exchange(finalAPI, HttpMethod.GET, null, WeatherResponse.class);
 
-        WeatherResponse body = response.getBody();
+            WeatherResponse body = response.getBody();
+            if(body != null){
+                redisService.set("weather_of_" + city, body, 300l);
+            }
+            else{
+                return null;
+            }
+            return body;
+        }
 
-        return body;
+
+
+
     }
 
     

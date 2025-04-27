@@ -1,4 +1,4 @@
-package com.vaibhav.journalApp.scheduler;
+package com.vaibhav.journalApp.cron;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

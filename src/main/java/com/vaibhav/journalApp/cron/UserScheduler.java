@@ -1,4 +1,4 @@
-package com.vaibhav.journalApp.scheduler;
+package com.vaibhav.journalApp.cron;
 
 import com.vaibhav.journalApp.cache.AppCache;
 import com.vaibhav.journalApp.entity.JournalEntry;
@@ -7,7 +7,6 @@ import com.vaibhav.journalApp.enums.Sentiment;
 import com.vaibhav.journalApp.repository.UserRepositoryImpl;
 import com.vaibhav.journalApp.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
