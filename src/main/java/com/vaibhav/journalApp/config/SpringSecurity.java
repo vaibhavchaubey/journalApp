@@ -1,5 +1,6 @@
 package com.vaibhav.journalApp.config;
 
+import com.vaibhav.journalApp.filter.JwtFilter;
 import com.vaibhav.journalApp.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -15,6 +16,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -23,6 +25,9 @@ public class SpringSecurity {
     // Injecting our custom UserDetailsServiceImpl to fetch user details from DB
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
+
+    @Autowired
+    private JwtFilter jwtFilter;
 
     // Defines the main security configuration for HTTP requests
     @Bean
@@ -38,20 +43,19 @@ public class SpringSecurity {
                         .requestMatchers("/admin/**").hasRole("ADMIN")      // Only accessible by users with ADMIN role
                         .anyRequest().authenticated()                       // All other endpoints require auth
                 )
-
                 // Enabling basic auth (you can later switch to JWT or form login)
                 .httpBasic(Customizer.withDefaults())
-
                 // Ensuring the app is stateless (important for JWT)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
 
                 .build();
     }
 
     // Provides the AuthenticationManager bean used in services for manual authentication (e.g. login method)
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
-        return authConfig.getAuthenticationManager();  // This manager will internally use the DaoAuthenticationProvider
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration auth) throws Exception {
+        return auth.getAuthenticationManager();  // This manager will internally use the DaoAuthenticationProvider
     }
 
     // Configures the authentication provider: how to fetch users + how to verify passwords
