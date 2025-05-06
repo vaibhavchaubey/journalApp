@@ -1,6 +1,10 @@
 package com.vaibhav.journalApp.entity;
 
-import lombok.*;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -19,11 +23,11 @@ public class User {
     @Id
     private ObjectId id;
     @Indexed(unique = true)
-    @NonNull
+    @NotNull
     private String username;
     private String email;
     private boolean sentimentAnalysis;
-    @NonNull
+    @NotNull
     private String password;
     @DBRef
     private List<JournalEntry> journalEntries = new ArrayList<>();

@@ -1,9 +1,11 @@
 package com.vaibhav.journalApp.controller;
 
+import com.vaibhav.journalApp.dto.UserDTO;
 import com.vaibhav.journalApp.entity.User;
 import com.vaibhav.journalApp.service.UserDetailsServiceImpl;
 import com.vaibhav.journalApp.service.UserService;
 import com.vaibhav.journalApp.utils.JwtUtil;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/public")
 @Slf4j
+@Tag(name = "Public APIs")
 public class PublicController {
     @Autowired
     private UserService userService;
@@ -31,12 +34,18 @@ public class PublicController {
 
     @GetMapping("health-check")
     public String healthCheck() {
+        log.info("Health is ok");
         return "OK";
     }
 
     @PostMapping("/signup")
-    public void signup(@RequestBody User user) {
-        userService.saveNewUser(user);
+    public void signup(@RequestBody UserDTO user) {
+        User newUser = new User();
+        newUser.setEmail(user.getEmail());
+        newUser.setUsername(user.getUsername());
+        newUser.setPassword(user.getPassword());
+        newUser.setSentimentAnalysis(user.isSentimentAnalysis());
+        userService.saveNewUser(newUser);
     }
 
 

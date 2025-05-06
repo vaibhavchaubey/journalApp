@@ -1,4 +1,4 @@
-package com.vaibhav.journalApp.cron;
+package com.vaibhav.journalApp.scheduler;
 
 import com.vaibhav.journalApp.cache.AppCache;
 import com.vaibhav.journalApp.entity.JournalEntry;

@@ -38,10 +38,9 @@ public class SpringSecurity {
 
                 // Authorizing requests based on URL patterns
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/public/**").permitAll()          // No auth needed for public endpoints
                         .requestMatchers("/journal/**", "/user/**").authenticated()  // Require authentication
                         .requestMatchers("/admin/**").hasRole("ADMIN")      // Only accessible by users with ADMIN role
-                        .anyRequest().authenticated()                       // All other endpoints require auth
+                        .anyRequest().permitAll()                       // All other endpoints do not require auth
                 )
                 // Enabling basic auth (you can later switch to JWT or form login)
                 .httpBasic(Customizer.withDefaults())
